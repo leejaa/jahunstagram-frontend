@@ -1,0 +1,25 @@
+.profileInput {
+    width: 50%;
+    margin-left: 20px;
+}
+
+.buttonInput {
+    margin-left: 120px;
+}
+
+.profileContent {
+    margin: 24px 16px 0
+}
+
+.profileDiv1 {
+    width: 100%;
+    border: 1px solid #afabab
+}
+
+.profileDiv2 {
+    width: 50%;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-left: 300px;
+}
+
