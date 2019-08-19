@@ -5,7 +5,7 @@ import { useQuery } from "react-apollo-hooks";
 import { SEARCH, SEE_ALLUSER } from "./SearchQueries";
 import Loader from "../../Components/Loader";
 
-export default withRouter(({ location: { search } }) => {
+export default withRouter(({ location: { search }, history }) => {
 
   console.log(`search : ` + search);
 
@@ -24,5 +24,5 @@ export default withRouter(({ location: { search } }) => {
 
   console.log(`data2 : ${JSON.stringify(data2)}`);
 
-  return loading || loading2 ? <Loader/> : <SearchPresenter searchTerm={term} loading={loading} data={data} data2={data2}/>;
+  return loading || loading2 ? <Loader/> : <SearchPresenter searchTerm={term} loading={loading} data={data} data2={data2} history={history}/>;
 });

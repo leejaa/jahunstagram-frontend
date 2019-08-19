@@ -25,7 +25,7 @@ const PostSection = styled(Section)`
   grid-auto-rows: 200px;
 `;
 
-const SearchPresenter = ({ searchTerm, loading, data, data2 }) => {
+const SearchPresenter = ({ searchTerm, loading, data, data2, history }) => {
   if (searchTerm === undefined) {
     return (
       <Wrapper>
@@ -67,9 +67,11 @@ const SearchPresenter = ({ searchTerm, loading, data, data2 }) => {
             data.search.map(feed => (
               <SquarePost
                 key={feed.id}
+                id={feed.id}
                 likeCount={feed.likeCount}
                 commentCount={""}
                 file={feed.pictures[0]}
+                history={history}
               />
             ))
           )}
