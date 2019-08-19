@@ -121,7 +121,9 @@ export default ({
   onKeyPress,
   comments,
   selfComments,
-  caption
+  caption,
+  toggleComment,
+  isComment,
 }) => (
   <Post>
     <Header>
@@ -144,7 +146,7 @@ export default ({
         <Button onClick={toggleLike}>
           {isLiked ? <HeartFull /> : <HeartEmpty />}
         </Button>
-        <Button>
+        <Button onClick={toggleComment}>
           <CommentIcon />
         </Button>
       </Buttons>
@@ -152,26 +154,39 @@ export default ({
       <Caption>
         <FatText text={username} /> {caption}
       </Caption>
-      {comments && (
-        <Comments>
-          {comments.map(comment => (
-            <Comment key={comment.id}>
-              <FatText text={comment.user.username} />
-              {comment.text}
-            </Comment>
-          ))}
-          {selfComments.map(comment => (
-            <Comment key={comment.id}>
-              <FatText text={comment.user.username} />
-              {comment.text}
-            </Comment>
-          ))}
-        </Comments>
-      )}
+
+      {
+        isComment ? (
+          comments && (
+            <Comments>
+              {comments.map(comment => (
+                <Comment key={comment.id}>
+                  <FatText text={comment.user.username} />
+                  {comment.text}
+                </Comment>
+              ))}
+              {selfComments.map(comment => (
+                <Comment key={comment.id}>
+                  <FatText text={comment.user.username} />
+                  {comment.text}
+                </Comment>
+              ))}
+            </Comments>
+          )
+        ) : (
+          comments.length > 0 &&  (
+            <Button onClick={toggleComment}>
+              <FatText text={"댓글보기"} />
+            </Button>
+          )
+        )
+      }
+
+      
       <Timestamp>{createdAt}</Timestamp>
       <Textarea
         onKeyPress={onKeyPress}
-        placeholder={"Add a comment..."}
+        placeholder={"댓글달기"}
         value={newComment.value}
         onChange={newComment.onChange}
       />

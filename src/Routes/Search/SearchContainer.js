@@ -2,13 +2,17 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import SearchPresenter from "./SearchPresenter";
 import { useQuery } from "react-apollo-hooks";
-import { SEARCH } from "./SearchQueries";
+import { SEARCH, SEE_ALLUSER } from "./SearchQueries";
+import Loader from "../../Components/Loader";
 
 export default withRouter(({ location: { search } }) => {
 
   console.log(`search : ` + search);
 
-  const term = search.split("=")[1];
+  const term = decodeURI(search).split("=")[1];
+
+  console.log(`term : ${term}`);
+
   const { data, loading } = useQuery(SEARCH, {
     skip: term === undefined,
     variables: {
@@ -16,7 +20,9 @@ export default withRouter(({ location: { search } }) => {
     }
   });
 
-  console.log(`search data : ${JSON.stringify(data)}`);
+  const { data : data2, loading : loading2 } = useQuery(SEE_ALLUSER);
 
-  return <SearchPresenter searchTerm={term} loading={loading} data={data} />;
+  console.log(`data2 : ${JSON.stringify(data2)}`);
+
+  return loading || loading2 ? <Loader/> : <SearchPresenter searchTerm={term} loading={loading} data={data} data2={data2}/>;
 });

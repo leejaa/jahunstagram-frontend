@@ -6,9 +6,9 @@ import { useQuery } from "react-apollo-hooks";
 import Loader from "../Components/Loader";
 import Post from "../Components/Post";
 
-const FEED_QUERY = gql`
-  {
-    seeFeeds {
+export const FEED_QUERY = gql`
+  query seeFeeds($feedId: String){
+    seeFeeds(feedId: $feedId) {
       id
       title
       content
@@ -43,8 +43,23 @@ const Wrapper = styled.div`
   min-height: 80vh;
 `;
 
-export default () => {
-  const { data, loading } = useQuery(FEED_QUERY);
+export default ({history}) => {
+
+  console.log(history);
+
+  const { data, loading, refetch } = useQuery(FEED_QUERY, {
+    variables: {
+      feedId : history.location.state && history.location.state.feedId
+    }
+  });
+  
+  const refresh = async() => {
+    await refetch();
+  }
+
+  if(history.location.state && history.location.state.feedId){
+    refresh();
+  }
 
   console.log(`data : ${JSON.stringify(data)}`);
 

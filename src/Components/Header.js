@@ -76,17 +76,15 @@ export default withRouter(({ history }) => {
   return (
     <Header>
       <HeaderWrapper>
-        <HeaderColumn>
-          <Link to="/">
+        <HeaderColumn onClick={()=>window.location="/"}>
             <Logo />
-          </Link>
         </HeaderColumn>
         <HeaderColumn>
           <form onSubmit={onSearchSubmit}>
             <SearchInput
               value={search.value}
               onChange={search.onChange}
-              placeholder="Search"
+              placeholder="검색"
             />
           </form>
         </HeaderColumn>
@@ -94,7 +92,7 @@ export default withRouter(({ history }) => {
           <HeaderLink to="/explore">
             <Compass />
           </HeaderLink>
-          <HeaderLink to="/notifications">
+          <HeaderLink to="/#">
             <HeartEmpty />
           </HeaderLink>
           {!data.me ? (

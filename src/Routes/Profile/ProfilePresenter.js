@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { Helmet } from "rl-react-helmet";
-import { Link } from "react-router-dom";
 import Loader from "../../Components/Loader";
-import Avatar from "../../Components/Avatar";
 import FatText from "../../Components/FatText";
 import FollowButton from "../../Components/FollowButton";
 import SquarePost from "../../Components/SquarePost";
 import Button from "../../Components/Button";
+
+const Container = styled.div``;
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -24,14 +24,50 @@ const Header = styled.header`
 
 const HeaderColumn = styled.div``;
 
+const Image = styled.label`
+  cursor: pointer;
+  height: 200px;
+  width: 200px;
+  border: 2px solid black;
+  display: block;
+  border-radius: 50%;
+  margin-bottom: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  overflow: hidden;
+  & img {
+    width: 200px;
+    height: 200px;
+  }
+`;
+
+const Input = styled.input`
+  color: white;
+  opacity: 0;
+  height: 1px;
+  &:focus {
+    outline: none;
+  }
+`;
+
 const UsernameRow = styled.div`
   display: flex;
   align-items: center;
+  width: 300px;
 `;
+
 
 const Username = styled.span`
   font-size: 26px;
   display: block;
+`;
+
+const Username2 = styled.span`
+  font-size: 26px;
+  display: block;
+  width: 65px;
 `;
 
 const Counts = styled.ul`
@@ -61,7 +97,7 @@ const Posts = styled.div`
   grid-auto-rows: 200px;
 `;
 
-export default ({ loading, data, logOut }) => {
+export default ({ loading, data, logOut, loading2, onChange, history }) => {
   if (loading === true) {
     return (
       <Wrapper>
@@ -73,63 +109,79 @@ export default ({ loading, data, logOut }) => {
       seeUser: {
         id,
         avatar,
-        name,
-        fullName,
+        username,
         isFollowing,
         isSelf,
-        bio,
         followingCount,
         followersCount,
-        postsCount,
-        posts
+        feedCount,
+        feed,
       }
     } = data;
     return (
       <Wrapper>
         <Helmet>
-          <title>{name} | Prismagram</title>
+          <title>{username} | 인스타그램</title>
         </Helmet>
         <Header>
           <HeaderColumn>
-            <Avatar size="lg" url={avatar} />
+            <Container>
+            {
+              isSelf && (
+                <Input id={"photo"} type="file" accept="image/*" onChange={onChange}/>
+              )
+            }
+            <Image htmlFor="photo">
+              {
+                loading2 ? (
+                  <img src={"http://images.battlecomics.co.kr/users/342512/page/item/381adfc0-c22d-4d62-9cd9-64781c063223.gif"} />
+                ) : (
+                  <img src={avatar} />
+                )
+              }
+            </Image>
+              {/* <Avatar size="lg" url={avatar} /> */}
+            </Container>
+
           </HeaderColumn>
           <HeaderColumn>
             <UsernameRow>
-              <Username>{name}</Username>{" "}
+              <Username>{username}</Username>{" "}
+              <Username2></Username2>
               {isSelf ? (
-                <Button onClick={logOut} text="Log Out" />
+                <Button onClick={logOut} text="로그아웃" width={"50%"}/>
               ) : (
-                <FollowButton isFollowing={isFollowing} id={id} />
+                <FollowButton isFollowing={isFollowing} id={id} width={"50%"}/>
               )}
             </UsernameRow>
             <Counts>
               <Count>
-                <FatText text={String(postsCount)} /> posts
+                <FatText text={String(feedCount)} /> 피드
               </Count>
               <Count>
-                <FatText text={String(followersCount)} /> followers
+                <FatText text={String(followersCount)} /> 팔로워
               </Count>
               <Count>
-                <FatText text={String(followingCount)} /> following
+                <FatText text={String(followingCount)} /> 팔로잉
               </Count>
             </Counts>
-            <FullName text={fullName} />
-            <Bio>{bio}</Bio>
-            {isSelf && (
-              <Link to={"/edit/" + id}>
-                <Button text="프로필 편집" />
-              </Link>
+            <FullName text={username} />
+            <Bio>&nbsp;</Bio>
+            {!isSelf && (
+                <Button text="자동로그인" />
             )}
           </HeaderColumn>
         </Header>
         <Posts>
-          {posts &&
-            posts.map(post => (
+          {feed &&
+            feed.map(f => (
               <SquarePost
-                key={post.id}
-                likeCount={post.likeCount}
-                commentCount={post.commentCount}
-                file={post.files[0]}
+                key={f.id}
+                id={f.id}
+                likeCount={f.likeCount}
+                commentCount={""}
+                file={f.pictures[0]}
+                history={history}
               />
             ))}
         </Posts>

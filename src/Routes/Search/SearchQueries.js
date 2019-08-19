@@ -2,19 +2,23 @@ import { gql } from "apollo-boost";
 
 export const SEARCH = gql`
   query search($term: String!) {
-    searchPost(term: $term) {
+    search(term: $term) {
       id
-      files {
+      pictures {
         url
       }
       likeCount
-      commentCount
     }
-    searchUser(term: $term) {
+  }
+`;
+
+export const SEE_ALLUSER = gql`
+  query seeAllUser{
+    seeAllUser{
       id
-      avatar
-      name
+      username
       isFollowing
+      avatar
       isSelf
     }
   }

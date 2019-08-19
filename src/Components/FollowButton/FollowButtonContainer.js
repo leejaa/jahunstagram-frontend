@@ -1,24 +1,27 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useMutation } from "react-apollo-hooks";
-import { FOLLOW, UNFOLLOW } from "./FollowButtonQueries";
+import { FOLLOW } from "./FollowButtonQueries";
 import FollowButtonPresenter from "./FollowButtonPresenter";
+import { FEED_QUERY } from "../../Routes/Feed";
 
-const FollowButtonContainer = ({ isFollowing, id }) => {
+
+const FollowButtonContainer = ({ isFollowing, id, width }) => {
   const [isFollowingS, setIsFollowing] = useState(isFollowing);
-  const followMutation = useMutation(FOLLOW, { variables: { id } });
-  const unfollowMutation = useMutation(UNFOLLOW, { variables: { id } });
+  const followMutation = useMutation(FOLLOW, { variables: { id }
+  , refetchQueries: () => [{ query: FEED_QUERY}]
+  });
 
   const onClick = () => {
     if (isFollowingS === true) {
       setIsFollowing(false);
-      unfollowMutation();
+      followMutation();
     } else {
       setIsFollowing(true);
       followMutation();
     }
   };
-  return <FollowButtonPresenter onClick={onClick} isFollowing={isFollowingS} />;
+  return <FollowButtonPresenter onClick={onClick} isFollowing={isFollowingS} width={width}/>;
 };
 
 FollowButtonContainer.propTypes = {

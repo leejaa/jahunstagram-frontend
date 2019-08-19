@@ -3,8 +3,8 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import FatText from "../../Components/FatText";
 import Loader from "../../Components/Loader";
-import UserCard from "../../Components/UserCard";
 import SquarePost from "../../Components/SquarePost";
+import UserCard from "../../Components/UserCard";
 
 const Wrapper = styled.div`
   height: 50vh;
@@ -25,11 +25,11 @@ const PostSection = styled(Section)`
   grid-auto-rows: 200px;
 `;
 
-const SearchPresenter = ({ searchTerm, loading, data }) => {
+const SearchPresenter = ({ searchTerm, loading, data, data2 }) => {
   if (searchTerm === undefined) {
     return (
       <Wrapper>
-        <FatText text="Search for something" />
+        <FatText text="검색어를 입력해주세요" />
       </Wrapper>
     );
   } else if (loading === true) {
@@ -38,17 +38,18 @@ const SearchPresenter = ({ searchTerm, loading, data }) => {
         <Loader />
       </Wrapper>
     );
-  } else if (data && data.searchUser && data.searchPost) {
+  } else if (data && data.search) {
     return (
       <Wrapper>
+
         <Section>
-          {data.searchUser.length === 0 ? (
-            <FatText text="No Users Found" />
+          {data2.seeAllUser.length === 0 ? (
+            <FatText text="유저를 찾을수 없습니다." />
           ) : (
-            data.searchUser.map(user => (
+            data2.seeAllUser.map(user => (
               <UserCard
                 key={user.id}
-                name={user.name}
+                username={user.username}
                 isFollowing={user.isFollowing}
                 url={user.avatar}
                 isSelf={user.isSelf}
@@ -57,16 +58,18 @@ const SearchPresenter = ({ searchTerm, loading, data }) => {
             ))
           )}
         </Section>
+
+
         <PostSection>
-          {data.searchPost.length === 0 ? (
-            <FatText text="No Posts Found" />
+          {data.search.length === 0 ? (
+            <FatText text="피드를 찾을수 업습니다." />
           ) : (
-            data.searchPost.map(post => (
+            data.search.map(feed => (
               <SquarePost
-                key={post.id}
-                likeCount={post.likeCount}
-                commentCount={post.commentCount}
-                file={post.files[0]}
+                key={feed.id}
+                likeCount={feed.likeCount}
+                commentCount={""}
+                file={feed.pictures[0]}
               />
             ))
           )}

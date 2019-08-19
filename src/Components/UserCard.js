@@ -23,11 +23,11 @@ const ELink = styled(Link)`
   margin-bottom: 10px;
 `;
 
-const UserCard = ({ id, name, isFollowing, url, isSelf }) => (
+const UserCard = ({ id, username, isFollowing, url, isSelf }) => (
   <Card>
     <EAvatar url={url} size={"md"} />
     <ELink to={`/${id}`}>
-      <FatText text={name} />
+      <FatText text={username} />
     </ELink>
     {!isSelf && <FollowButton id={id} isFollowing={isFollowing} />}
   </Card>
@@ -35,7 +35,7 @@ const UserCard = ({ id, name, isFollowing, url, isSelf }) => (
 
 UserCard.propTypes = {
   id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   isFollowing: PropTypes.bool.isRequired,
   url: PropTypes.string.isRequired,
   isSelf: PropTypes.bool.isRequired
