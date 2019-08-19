@@ -30,9 +30,12 @@ export default withRouter(({history}) => {
 
   useEffect(() => {
 
-    toast.info(`검색창에 검색어를 입력해주세요`);
+    if(!loading && !loading2){
+      toast.info(`검색창에 검색어를 입력해주세요`);
+    }
+
     
-  }, [])
+  }, [loading, loading2])
 
   console.log(`ExplorePresenter.js | data : ${JSON.stringify(data, null, 2)}`);
 

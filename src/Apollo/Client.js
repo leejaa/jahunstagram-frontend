@@ -109,7 +109,7 @@ const client = new ApolloClient({
             isLoggedIn: true
           }
         });
-        return null;
+        return token;
       },
       logUserOut: (_, __, { cache }) => {
         localStorage.removeItem("token");

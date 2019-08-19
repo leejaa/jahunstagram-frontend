@@ -55,7 +55,8 @@ export default ({
   email,
   setAction,
   onSubmit,
-  secret
+  secret,
+  autoLogin
 }) => (
   <Wrapper>
     <Form>
@@ -65,8 +66,9 @@ export default ({
             <title>로그인</title>
           </Helmet>
           <form onSubmit={onSubmit}>
-            <Input placeholder={"Email"} {...email} type="email" />
+            <Input placeholder={"Email"} {...email} type="email" required={false}/>
             <Button text={"로그인"} />
+            <Button text={"테스트계정으로 로그인"} onClick={autoLogin}/>
           </form>
         </>
       )}

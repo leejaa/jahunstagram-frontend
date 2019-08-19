@@ -101,6 +101,31 @@ export default () => {
     }
   };
 
+  const autoLogin = async() => {
+    try {
+      const {
+        data: { confirmSecret: token }
+      } = await confirmSecretMutation({
+        variables: {
+          email: "jahun88@naver.com"
+          , authPassword: ""
+        }
+      });
+      if (token !== "" && token !== undefined) {
+        const token2 = localLogInMutation({ variables: { token } });
+
+        if(token2){
+          window.location = "/"
+        }
+      } else {
+        throw Error();
+      }
+    } catch(error) {
+      fnLog(`error : ${error}`);
+      toast.error("오류가 발생하였습니다.");
+    }
+  }
+
   return (
     <AuthPresenter
       setAction={setAction}
@@ -111,6 +136,7 @@ export default () => {
       email={email}
       secret={secret}
       onSubmit={onSubmit}
+      autoLogin={autoLogin}
     />
   );
 };

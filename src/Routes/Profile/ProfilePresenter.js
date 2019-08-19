@@ -97,7 +97,7 @@ const Posts = styled.div`
   grid-auto-rows: 200px;
 `;
 
-export default ({ loading, data, logOut, loading2, onChange, history }) => {
+export default ({ loading, data, logOut, loading2, onChange, history, autoLogin, loading3 }) => {
   if (loading === true) {
     return (
       <Wrapper>
@@ -116,6 +116,7 @@ export default ({ loading, data, logOut, loading2, onChange, history }) => {
         followersCount,
         feedCount,
         feed,
+        email
       }
     } = data;
     return (
@@ -168,7 +169,7 @@ export default ({ loading, data, logOut, loading2, onChange, history }) => {
             <FullName text={username} />
             <Bio>&nbsp;</Bio>
             {!isSelf && (
-                <Button text="자동로그인" />
+                <Button text={loading3 ? "로그인 중입니다..." : "자동로그인"} onClick={() =>autoLogin(email)}/>
             )}
           </HeaderColumn>
         </Header>
