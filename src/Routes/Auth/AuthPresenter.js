@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 
+
 const Wrapper = styled.div`
   min-height: 80vh;
   display: flex;
@@ -56,7 +57,8 @@ export default ({
   setAction,
   onSubmit,
   secret,
-  autoLogin
+  autoLogin,
+  kakaoLogin
 }) => (
   <Wrapper>
     <Form>
@@ -69,6 +71,7 @@ export default ({
             <Input placeholder={"Email"} {...email} type="email" required={false}/>
             <Button text={"로그인"} />
             <Button text={"테스트계정으로 로그인"} onClick={autoLogin}/>
+            <Button text={"카카오계정으로 로그인"} onClick={kakaoLogin} backgroundColor={"#f7e317"} textColor={"black"}/>
           </form>
         </>
       )}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AuthPresenter from "./AuthPresenter";
 import useInput from "../../Hooks/useInput";
 import { useMutation } from "react-apollo-hooks";
+import axios from "axios";
 import {
   LOG_IN,
   CREATE_ACCOUNT,
@@ -10,6 +11,7 @@ import {
 } from "./AuthQueries";
 import { toast } from "react-toastify";
 import { fnLog } from "../../utils";
+import { BACKEND_URL, CLIENT_ID } from "../../env";
 
 export default () => {
   const [action, setAction] = useState("logIn");
@@ -126,6 +128,19 @@ export default () => {
     }
   }
 
+  const kakaoLogin = async() => {
+
+    const state = ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1) + ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+
+    window.open(`https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${BACKEND_URL}/kakao&response_type=code&state=${state}&encode_state=true`);
+
+    toast.info(`카카오로그인을 기다리는 중입니다..`, {
+      autoClose: 10000000
+    });
+    
+
+  }
+
   return (
     <AuthPresenter
       setAction={setAction}
@@ -137,6 +152,7 @@ export default () => {
       secret={secret}
       onSubmit={onSubmit}
       autoLogin={autoLogin}
+      kakaoLogin={kakaoLogin}
     />
   );
 };
