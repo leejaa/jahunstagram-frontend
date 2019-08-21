@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import axios from "axios"
 import AuthPresenter from "./AuthPresenter";
 import useInput from "../../Hooks/useInput";
 import { useMutation } from "react-apollo-hooks";
-import axios from "axios";
 import {
   LOG_IN,
   CREATE_ACCOUNT,
@@ -14,6 +14,9 @@ import { fnLog } from "../../utils";
 import { BACKEND_URL, CLIENT_ID } from "../../env";
 
 export default () => {
+
+  let state;
+
   const [action, setAction] = useState("logIn");
   const username = useInput("");
   const firstName = useInput("");
@@ -130,14 +133,61 @@ export default () => {
 
   const kakaoLogin = async() => {
 
-    const state = ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1) + ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+     const tempState = ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1) + ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
 
-    window.open(`https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${BACKEND_URL}/kakao&response_type=code&state=${state}&encode_state=true`);
+     state = tempState;
+
+    window.open(`https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${BACKEND_URL}/kakao&response_type=code&state=${tempState}&encode_state=true`);
 
     toast.info(`카카오로그인을 기다리는 중입니다..`, {
       autoClose: 10000000
     });
+
+    console.log(`state : ${state}`);
+
+    setInterval(async() => {
+
+      console.log(`요청 state : ${state}`);
+
+      const resultEmail = await axios.get(`${BACKEND_URL}/kakaoLogin`, {
+        params: {
+          state: state
+        }
+      });
+
+      console.log(`resultEmail : ${JSON.stringify(resultEmail)}`);
+
+      if(resultEmail){
+
+        const {data } = resultEmail;
+
+        console.log(`data : ${JSON.stringify(data)}`);
+
+        try {
+          const {
+            data: { confirmSecret: token }
+          } = await confirmSecretMutation({
+            variables: {
+              email: data[0].email
+              , authPassword: state
+            }
+          });
+          if (token !== "" && token !== undefined) {
+            const token2 = localLogInMutation({ variables: { token } });
     
+            if(token2){
+              window.location = "/"
+            }
+          } else {
+            throw Error();
+          }
+        } catch(error) {
+          fnLog(`error : ${error}`);
+          // toast.error("오류가 발생하였습니다.");
+        }
+      }
+
+    }, 3000);
 
   }
 
